@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
+
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Test
+        env:
+          NODE_ENV: test
+          PORT: 5001
+          MONGODB_URI: mongodb://127.0.0.1:27017/gaza-market-ci
+          CLIENT_ORIGIN: http://localhost:5173
+          CORS_ORIGINS: http://localhost:5173
+          RATE_LIMIT_WINDOW_MS: 900000
+          RATE_LIMIT_MAX_REQUESTS: 1000
+          JWT_SECRET: ci-test-secret-key-with-at-least-32-characters
+          JWT_EXPIRES_IN: 7d
+          BCRYPT_SALT_ROUNDS: 10
+          COOKIE_NAME: token
+          COOKIE_DOMAIN: ""
+          TRUST_PROXY: 1
+        run: npm run test:run
