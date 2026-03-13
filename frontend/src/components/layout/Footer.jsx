@@ -4,6 +4,7 @@ import {
 	Twitter,
 	Instagram,
 	Linkedin,
+	Globe,
 	Lock,
 	Shield,
 	Star,
@@ -29,6 +30,15 @@ const Footer = () => {
 							quality sellers across categories. Shop with confidence and sell
 							with success.
 						</p>
+						<a
+							href="https://gazamoore.vercel.app"
+							target="_blank"
+							rel="noreferrer"
+							className="inline-flex items-center gap-2 text-sm text-white/80 hover:text-white transition-colors mb-4"
+						>
+							<Globe className="w-4 h-4" />
+							Portfolio
+						</a>
 						<div className="flex space-x-4">
 							<a
 								href="https://www.facebook.com"
